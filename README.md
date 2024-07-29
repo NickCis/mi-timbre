@@ -24,7 +24,7 @@ La implementación actual no utiliza una base de datos, si no, un archivo para g
 
 Para configurar, copiar el archivo `db.example.ts` a `db.ts` y editar:
 
-```
+```typescript
 import type { DB } from './db.interface';
 
 const data: DB = {
