@@ -1,8 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
+Para correr en desarrollo:
 
 ```bash
 npm run dev
@@ -14,23 +10,39 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Escuchar las notificaciones
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Las notificaciones se envían a través de [ntfy.sh](https://ntfy.sh/). Se puede usar la app o la [versión web](https://ntfy.sh/app).
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Para recibir las notificaciones, uno se debe suscribir al tema de la notificación de la puerta que quiere escuchar.
 
-## Learn More
+## Configuración
 
-To learn more about Next.js, take a look at the following resources:
+La implementación actual no utiliza una base de datos, si no, un archivo para guardar los ids de edificios, puertas y los nombres de los temas que se usan para enviar las notifications.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Para configurar, copiar el archivo `db.example.ts` a `db.ts` y editar:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```
+import type { DB } from './db.interface';
 
-## Deploy on Vercel
+const data: DB = {
+  '{building-id}': {
+    id: '{building-id}',
+    doors: [
+      {
+        id: '{door-id}',
+        name: 'door name',
+        topic: 'door-{door-id}',
+      },
+    ],
+  },
+};
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+export default data;
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Lo ideal sería que los ids sean uuid v4, se puede usar cualquier generador de [ids online](https://uuidonline.com/)
+
+## Generar QR
+
+Para obtener un QR para el tablero de timbres de un edificio se debe entrar al link `/qr/<building-id>`.
