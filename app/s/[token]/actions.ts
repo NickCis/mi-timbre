@@ -54,6 +54,7 @@ export async function sendNotification(
       'Content-Type': 'application/x-www-form-urlencoded',
       Priority: 'urgent',
       Tags: 'door',
+      Title: `Tocaron timbre en ${door.name}`,
     },
     body: 'Alguien esta en la puerta!',
   });
