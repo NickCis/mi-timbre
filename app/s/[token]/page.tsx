@@ -27,7 +27,7 @@ export default async function Building({ params }: BuildingProps) {
     <div>
       <div className="group flex items-center text-sm font-medium p-3">
         <BellRing className="w-4 h-4" />
-        <Separator orientation="verticall" className="mx-2 h-4" />
+        <Separator orientation="vertical" className="mx-2 h-4" />
         <span className="underline-offset-4 group-hover:underline">
           Mi Timbre
         </span>
