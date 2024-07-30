@@ -30,7 +30,8 @@ export function DoorContent({ id, name }: DoorContentProps) {
           variant="outline"
           disabled={status.pending}
         >
-          <Bell className="h-6 w-6" />
+          <Bell className="h-4 w-4 mr-2" />
+          Tocar timbre
           {!!status.pending && (
             <Loader2 className="h-4 w-4 animate-spin absolute inset-x-1/2 -ml-2" />
           )}
