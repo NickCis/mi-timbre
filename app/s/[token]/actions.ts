@@ -1,8 +1,10 @@
 'use server';
 
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import DB from '@/db';
+import { UserCookieName } from '@/constants';
 
 import { verify } from './utils';
 
@@ -13,8 +15,9 @@ export async function sendNotification(
   formData: FormData,
 ) {
   const doorId = formData.get('door') as string;
+  const uid = cookies().get(UserCookieName)?.value;
 
-  if (!token || !buildingId || !doorId)
+  if (!token || !buildingId || !doorId || !uid)
     return {
       error: 'missing-arguments',
       errorMessage: 'Hubo un error',
@@ -47,16 +50,33 @@ export async function sendNotification(
     };
   }
 
-  const url = `https://ntfy.sh/${door.topic}`;
-  const res = await fetch(url, {
+  const res = await fetch('https://ntfy.sh/', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Priority: 'urgent',
-      Tags: 'door',
-      Title: `Tocaron timbre en ${door.name}`,
+      'Content-Type': 'application/json',
     },
-    body: 'Alguien esta en la puerta!',
+    body: JSON.stringify({
+      topic: door.topic,
+      title: `Tocaron timbre en ${door.name}`,
+      message: 'Alguien esta en la puerta!',
+      tags: ['door'],
+      priority: 5,
+      actions: [
+        {
+          action: 'http',
+          label: 'Yendo!',
+          url: `https://ntfy.sh/`,
+          body: JSON.stringify({
+            topic: `mtui-${uid}`,
+            title: 'message',
+            message: JSON.stringify({
+              text: 'Hola, estoy yendo!',
+              doorId: door.id,
+            }),
+          }),
+        },
+      ],
+    }),
   });
 
   if (!res.ok) {
